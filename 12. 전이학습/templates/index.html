@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+    <title>이미지 분류 및 Grad-CAM</title>
+    <style>
+        /* 전체 내용을 담는 컨테이너 스타일 */
+        .container {
+            max-width: 800px; /* 내용의 최대 너비 설정 */
+            margin: 0 auto; /* 좌우 여백을 자동으로 설정하여 가운데 정렬 */
+            padding: 20px; /* 내부 여백 */
+            text-align: center; /* 컨테이너 내부 텍스트 가운데 정렬 (블록 요소에는 영향을 미치지 않음) */
+        }
+        h1 {
+            text-align: center; /* 제목 가운데 정렬 */
+        }
+        form {
+            margin-top: 20px; /* 폼 위쪽 여백 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 전체 내용을 .container div로 감쌈 -->
+    <div class="container">
+        <h1>치타, 하이에나, 호랑이의<br>새로운 이미지 업로드</h1>
+        <form method="post" action="{{ url_for('predict') }}" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*">
+            <input type="submit" value="업로드 및 예측">
+        </form>
+    </div>
+</body>
+</html>
