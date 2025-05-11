@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+    <title>예측 결과</title>
+    <style>
+        /* 전체 내용을 담는 컨테이너 스타일 */
+        .container {
+            max-width: 800px; /* 내용의 최대 너비 설정 (필요시 조정) */
+            margin: 0 auto; /* 좌우 여백 자동 설정하여 가운데 정렬 */
+            padding: 20px; /* 내부 여백 */
+            text-align: center; /* 컨테이너 내부 텍스트 기본 가운데 정렬 */
+        }
+         h1, h2, h3 { /* 제목들도 가운데 정렬 */
+            text-align: center;
+        }
+        p {
+             text-align: left; /* 텍스트 단락 왼쪽 정렬 */
+             margin-top: 10px; /* 단락 위쪽 여백 */
+        }
+
+        /* 이미지를 담는 컨테이너 스타일 (좌우 배치 Flexbox) */
+        .image-container {
+            display: flex; /* Flexbox 레이아웃 활성화 */
+            justify-content: space-around; /* 이미지들 주변 공간 균등 분배 */
+            align-items: flex-start; /* 이미지들을 위쪽 기준으로 정렬 */
+            margin-top: 20px; /* 컨테이너 위쪽 여백 */
+            flex-wrap: wrap; /* 화면이 좁아지면 이미지가 다음 줄로 넘어가도록 설정 */
+            /* 테스트를 위해 flex-direction: row; 를 명시적으로 추가해 볼 수 있습니다 (기본값). */
+            /* flex-direction: row; */
+        }
+
+        /* image-container 바로 아래 자식 img 태그들에 대한 스타일 */
+        .image-container img {
+            /* 이미지가 컨테이너 너비에 맞춰 유연하게 크기 조절되도록 설정 */
+            max-width: 48%; /* 컨테이너 너비의 최대 48%를 차지 (여백 고려) */
+            height: auto; /* 이미지 비율 유지 */
+            border: 1px solid #ddd; /* 이미지 테두리 */
+            padding: 5px; /* 테두리 안쪽 여백 */
+            box-sizing: border-box; /* padding과 border를 이미지 크기에 포함 */
+            margin-bottom: 10px; /* 이미지가 나란히 배치되지 않고 아래로 쌓일 경우를 대비한 아래 여백 */
+            /* Flexbox 아이템 속성 (기본값 사용) */
+            /* flex-basis: auto; */
+            /* flex-grow: 0; */
+            /* flex-shrink: 1; */
+        }
+
+         /* 이미지가 나란히 있을 때 이미지들 사이에 간격 추가 */
+         .image-container img:first-child {
+             margin-right: 10px; /* 첫 번째 이미지 오른쪽에 여백 추가 */
+         }
+          .image-container img:last-child {
+             margin-left: 10px; /* 마지막 이미지 왼쪽에 여백 추가 */
+         }
+
+         /* 화면이 좁아져 이미지가 나란히 못 설 경우 (Flex wrap 시) 스타일 */
+         @media (max-width: 600px) { /* 예를 들어 600px 이하 화면에서 */
+             .image-container {
+                 flex-direction: column; /* 세로 방향으로 쌓이도록 변경 */
+                 align-items: center; /* 세로 쌓임 시 이미지들을 가운데 정렬 */
+             }
+             .image-container img {
+                 max-width: 95%; /* 세로 쌓임 시 컨테이너 너비 거의 전체 사용 */
+                 margin-right: 0; /* 좌우 여백 제거 */
+                 margin-left: 0;
+                 margin-bottom: 10px; /* 아래쪽 여백 추가 */
+             }
+              /* 세로 쌓임 시 마지막 이미지 아래쪽 여백 제거 */
+             .image-container img:last-child {
+                  margin-bottom: 0;
+             }
+         }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>예측 결과</h1>
+
+        <p>{{ prediction_text | safe }}</p>
+        <p>{{ probability_text | safe }}</p>
+
+        <h2>시각화 결과</h2>
+
+        <div class="image-container">
+            {% if original_image %}
+             <img src="{{ original_image }}" alt="원본 사진">
+             {% endif %}
+
+            {% if grad_cam_image %}
+            <img src="{{ grad_cam_image }}" alt="Grad-CAM 시각화 이미지">
+            {% endif %}
+        </div>
+         {% if not original_image or not grad_cam_image %}
+             <p>이미지를 불러오거나 Grad-CAM 시각화 이미지를 생성할 수 없습니다.</p>
+         {% endif %}
+
+
+        <br>
+        <a href="{{ url_for('index') }}">다른 이미지 업로드</a>
+    </div>
+</body>
+</html>
